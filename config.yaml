@@ -1,0 +1,22 @@
+model_name: insanely-fast-whisper
+python_version: py311
+requirements:
+  - torch == 2.1.0
+  - pyannote-audio == 3.1.1
+  - transformers == 4.42.3
+  - optimum == 1.17.0
+  - accelerate == 0.27.2
+  - https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.3/flash_attn-2.5.3+cu122torch2.1cxx11abiFALSE-cp311-cp311-linux_x86_64.whl
+model_cache:
+  - repo_id: openai/whisper-large-v3
+    allow_patterns:
+      - "*.safetensors"
+resources:
+  accelerator: A10G
+  cpu: "4"
+  memory: 16Gi
+  use_gpu: true
+secrets:
+  hf_access_token: null
+system_packages:
+  - "ffmpeg"
