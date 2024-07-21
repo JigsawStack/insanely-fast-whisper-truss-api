@@ -60,13 +60,12 @@ Check out the original project [Insanely Fast Whisper API](https://github.com/Ji
 Learn how to can your model from the API [here](https://docs.baseten.co/invoke/quickstart)
 
 ### Endpoints
+
 #### Base URL
-The base URL should look something like this:
 ```
-https://{model_id}.api.baseten.co/production/predict
+POST https://{model_id}.api.baseten.co/production/predict
 ```
 
-#### **POST** `/`
 Transcribe or translate audio into text
 ##### Body params (JSON)
 | Name    | value |
@@ -77,6 +76,17 @@ Transcribe or translate audio into text
 | batch_size | Number of parallel batches you want to compute. Reduce if you face OOMs. default: `64` |
 | timestamp | `chunk`, `work`  default: `chunk` |
 | diarise_audio | Diarise the audio clips by speaker. You will need to set hf_token. default:`false` |
+
+#### Webhook URL
+```
+POST https://{model_id}.api.baseten.co/production/async_predict
+```
+
+##### Body params (JSON)
+| Name    | value |
+|------------------|------------------|
+| model_input (Required) |  body params of above API |
+| webhook_endpoint | callback url |
 
 
 ## JigsawStack
