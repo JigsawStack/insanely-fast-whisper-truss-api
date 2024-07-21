@@ -5,7 +5,7 @@ Features:
 * 🎤 Transcribe audio to text at blazing fast speeds
 * 📖 Fully open source and deployable on any GPU cloud provider
 * 🗣️ Built-in speaker diarization
-* ⚡ Easy to use and Fast API layer
+* ⚡ Easy to use and API layer
 * 📃 Async background tasks and webhooks
 * 🔥 Optimized for concurrency and parallel processing
 * ✅ Task management, cancel and status endpoints
@@ -25,7 +25,7 @@ Here are some benchmarks we ran on Nvidia A10G - 16GB and Baseten GPU infra👇
 | **large-v3 (Transformers) (`fp16` + `batching [24]` + `Flash Attention 2`)** | **~2 (*1 min 38 sec*)**            |
 | **large-v3 (Transformers) (`fp16` + `batching [24]` + `Flash Attention 2` + `diarization`)** | **~3 (*3 min 16 sec*)**            |
 | **large-v3 (Transformers) (`fp16` + `batching [24]` + `Flash Attention 2` + `baseten startup`)** | **~2 (*1 min 10 sec*)**            |
-| **large-v3 (Transformers) (`fp16` + `batching [24]` + `Flash Attention 2` + `diarization + baseten startup`)** | **~3 (*2 min 48 sec*)**|
+| **large-v3 (Transformers) (`fp16` + `batching [24]` + `Flash Attention 2` + `diarization` + `baseten startup`)** | **~3 (*2 min 48 sec*)**|
 
 The estimated startup time for the Baseten machine with GPU and loading up the model is around ~20 seconds. The rest of the time is spent on the actual computation.
 
@@ -55,11 +55,9 @@ Check out the original project [Insanely Fast Whisper API](https://github.com/Ji
 ## Fully managed and scalable API 
 [JigsawStack](https://jigsawstack.com) provides a bunch of powerful APIs for various use cases while keeping costs low. This project is available as a fully managed API [here](https://jigsawstack.com/speech-to-text) with enhanced cloud scalability for cost efficiency and high uptime. Sign up [here](https://jigsawstack.com) for free!
 
-
-## API usage
-Learn how to can your model from the API [here](https://docs.baseten.co/invoke/quickstart)
-
 ### Endpoints
+
+Learn more about calling Baseten's APIs [here](https://docs.baseten.co/invoke/quickstart)
 
 #### Base URL
 ```
@@ -70,7 +68,7 @@ Transcribe or translate audio into text
 ##### Body params (JSON)
 | Name    | value |
 |------------------|------------------|
-| url (Required) |  url of audio |
+| url (Required) |  URL of audio |
 | task | `transcribe`, `translate`  default: `transcribe` |
 | language | `None`, `en`, [other languages](https://huggingface.co/openai/whisper-large-v3) default: `None` Auto detects language
 | batch_size | Number of parallel batches you want to compute. Reduce if you face OOMs. default: `64` |
