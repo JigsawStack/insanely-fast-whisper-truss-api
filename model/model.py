@@ -30,32 +30,38 @@ class Model:
         self.diarization_pipeline.to(torch.device("cuda:0"))
 
     def predict(self, request: dict):
-        url = request.get("url")
-        task = request.get("task") or "transcribe"
-        language = request.get("language") or "None"
-        batch_size = request.get("batch_size") or 64
-        chunk_length_s = request.get("chunk_length_s") or 30
-        timestamp = request.get("timestamp") or "Chunk"
-        diarise_audio = request.get("diarise_audio") or False
+        try:
+            url = request.get("url")
+            task = request.get("task") or "transcribe"
+            language = request.get("language") or "None"
+            batch_size = request.get("batch_size") or 64
+            chunk_length_s = request.get("chunk_length_s") or 30
+            timestamp = request.get("timestamp") or "Chunk"
+            diarise_audio = request.get("diarise_audio") or False
 
-        generate_kwargs = {
-            "task": task,
-            "language": None if (language == "None" or language == None) else language,
-        }
+            generate_kwargs = {
+                "task": task,
+                "language": (
+                    None if (language == "None" or language == None) else language
+                ),
+            }
 
-        outputs = self._model(
-            url,
-            chunk_length_s=chunk_length_s,
-            batch_size=batch_size,
-            generate_kwargs=generate_kwargs,
-            return_timestamps="word" if timestamp == "word" else True,
-        )
-
-        if diarise_audio:
-            speakers_transcript = diarize(
-                self.diarization_pipeline,
+            outputs = self._model(
                 url,
-                outputs,
+                chunk_length_s=chunk_length_s,
+                batch_size=batch_size,
+                generate_kwargs=generate_kwargs,
+                return_timestamps="word" if timestamp == "word" else True,
             )
-            outputs["speakers"] = speakers_transcript
-        return outputs
+
+            if diarise_audio:
+                speakers_transcript = diarize(
+                    self.diarization_pipeline,
+                    url,
+                    outputs,
+                )
+                outputs["speakers"] = speakers_transcript
+            return outputs
+        except Exception as e:
+            print(e)
+            raise {"detail": str(e)}
