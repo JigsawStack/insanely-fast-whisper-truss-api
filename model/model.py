@@ -64,4 +64,4 @@ class Model:
             return outputs
         except Exception as e:
             print(e)
-            raise {"detail": str(e)}
+            return {"error": True, "detail": str(e)}
