@@ -18,7 +18,7 @@ class Model:
             "automatic-speech-recognition",
             model="openai/whisper-large-v3",
             torch_dtype=torch.float16,
-            device="cuda:0",
+            device_map="auto",
             model_kwargs=({"attn_implementation": "flash_attention_2"}),
         )
 
@@ -27,7 +27,7 @@ class Model:
             use_auth_token=self.hf_token,
         )
 
-        self.diarization_pipeline.to(torch.device("cuda:0"))
+        self.diarization_pipeline.to(torch.device("cuda"))
 
     def predict(self, request: dict):
         try:
