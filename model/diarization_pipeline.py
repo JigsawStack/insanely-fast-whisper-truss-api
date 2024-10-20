@@ -1,4 +1,4 @@
-from .diarize import (
+from model.diarize import (
     post_process_segments_and_transcripts,
     diarize_audio,
     preprocess_inputs,

@@ -1,7 +1,9 @@
 import torch
-from transformers import pipeline
-from .diarization_pipeline import diarize
+from transformers import pipeline, AutoModelForSpeechSeq2Seq, AutoProcessor
+from model.diarization_pipeline import diarize
 from pyannote.audio import Pipeline
+
+model_id = "openai/whisper-large-v3-turbo"
 
 
 class Model:
@@ -14,12 +16,24 @@ class Model:
         self.diarization_pipeline = None
 
     def load(self):
+
+        model = AutoModelForSpeechSeq2Seq.from_pretrained(
+            model_id,
+            torch_dtype=torch.float16,
+            low_cpu_mem_usage=True,
+            attn_implementation="flash_attention_2",
+        ).to("cuda:0")
+
+        processor = AutoProcessor.from_pretrained(model_id)
+
         self._model = pipeline(
             "automatic-speech-recognition",
-            model="openai/whisper-large-v3",
+            model=model,
+            tokenizer=processor.tokenizer,
+            feature_extractor=processor.feature_extractor,
             torch_dtype=torch.float16,
             device_map="auto",
-            model_kwargs=({"attn_implementation": "flash_attention_2"}),
+            # model_kwargs=({"attn_implementation": "flash_attention_2"}),
         )
 
         self.diarization_pipeline = Pipeline.from_pretrained(
